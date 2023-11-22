@@ -17,8 +17,10 @@ return new class extends Migration
             $table->integer('product_id');
             $table->decimal('total_amount');
             $table->enum('payment_status', ['pending', 'paid', 'failed']);
+            $table->integer('users_id');
             
-            $table->timestamp('order_date');
+            $table->date('order_date');
+            $table->timestamps();
         });
     }
 

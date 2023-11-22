@@ -17,7 +17,23 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 $router->get('/products', 'ProductController@index');
-$router->post('/products', 'ProductController@store');
 $router->get('/product/{product_id}', 'ProductController@show');
-$router->put('/product/{product_id}', 'ProductController@update');
-$router->delete('/product/{product_id}', 'ProductController@destroy');
+
+$router->group(['prefix' => 'auth'], function () use ($router) {
+    $router->post('/register', 'AuthController@register');
+    $router->post('/login', 'AuthController@login');
+   
+});
+
+Route::group(['middleware' => ['auth']], function($router) {
+    $router->post('/products', 'ProductController@store');
+    $router->put('/product/{product_id}', 'ProductController@update');
+    $router->delete('/product/{product_id}', 'ProductController@destroy');
+    $router->get('/orders', 'OrderController@index');
+    $router->post('/orders', 'OrderController@store');
+    $router->put('/order/{order_id}', 'OrderController@update');
+    $router->delete('order/{order_id}', 'OrderController@destroy');
+});
+
+
+$router->get('/order/{order_id}', 'OrderController@show');
